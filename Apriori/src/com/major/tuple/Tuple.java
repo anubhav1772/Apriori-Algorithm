@@ -5,8 +5,8 @@ import java.util.Set;
 
 public class Tuple 
 {
-	Set<Integer> itemset;
-	int support;
+	public Set<Integer> itemset;
+	public int support;
 	public Tuple()
 	{
 		itemset=new HashSet<Integer>();
