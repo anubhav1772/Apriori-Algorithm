@@ -22,8 +22,8 @@ public class Apriori
     
     public Apriori()
     {
-       C=new HashSet<>();
-       L=new HashSet<>();
+       C=new HashSet<Tuple>();
+       L=new HashSet<Tuple>();
        min_support=2;     
     }
     
@@ -51,7 +51,7 @@ public class Apriori
     	}
     	
     }
-    
+   
     /* Function to count the number of occurences of a given itemset in the entire transaction dataset. */
     /* step for support count of an itemset. */
     public int count(Set<Integer> s)
@@ -95,6 +95,67 @@ public class Apriori
     
     public void generateFrequentItemsets()
     {
+    	boolean flag=true;
+    	int size=1;
+    	Set<Set> candidate_set=new HashSet<Set>();
+    	int element=0;
+    	while(flag)    // while loop 1
+    	{
+    		C.clear();
+    		candidate_set.clear();
+    		Iterator<Tuple> it=L.iterator();
+    		Set<Integer> set;
+    		while(it.hasNext())  // while loop 2
+    		{
+    			set=it.next().itemset;
+    			Iterator<Tuple> _it=L.iterator();
+    			Tuple tup;
+    			while(_it.hasNext()) // while loop 3
+    			{
+    				tup=_it.next();
+    				Iterator<Integer> _it_=tup.itemset.iterator();
+    				while(_it_.hasNext())
+    				{
+    					element=(int) _it_.next();
+    					set.add(element);
+    					if(set.size()!=size)
+    					{
+    						Integer arr[]=set.toArray(new Integer[0]);
+    						Set<Integer> temp=new HashSet<Integer>();
+    						for(Integer i:arr)
+    						{
+    							temp.add(i);
+    						}
+    						candidate_set.add(temp);
+    						set.remove(element);
+    					}
+    				}
+    			}  // end of while loop 3
+    			
+    		} // end of while loop 2
+    		
+    		Iterator<Set> iterator=candidate_set.iterator();
+        	Set s;
+        	while(iterator.hasNext())
+        	{
+        		s=iterator.next();
+        		C.add(new Tuple(s,count(s)));
+        	}
+        	prune();
+        	if(L.size()<=1)
+        	{
+        		flag=false;
+        	}
+        	++size;
+    		
+    			
+    	} // end of while loop 1
+    	
+    	System.out.println("**** Most Ftequent Itemset ****");
+    	for(Tuple tuple : L) 
+    	{
+			System.out.println(tuple.itemset + " : " + tuple.support);
+		}	
     	
     }
     
@@ -170,12 +231,33 @@ public class Apriori
     	}
     }
     
-    
+    public void init()
+    {
+    	Set<Integer> candidate_set=new HashSet<Integer>();
+    	for(int i=0;i<dataset.length;i++) 
+    	{
+    		for(int j=0;j<dataset[i].length;j++)
+    		{
+    			candidate_set.add(dataset[i][j]);
+    		}
+    	}
+    	Iterator<Integer> it=candidate_set.iterator();
+    	int item;
+    	while(it.hasNext())
+    	{
+    		item=(int) it.next();
+    		Set<Integer> s = new HashSet<>();
+			s.add(item);
+    		L.add(new Tuple(s,count(s)));
+    	}
+    	prune();
+    	generateFrequentItemsets();
+    }
     
 	public static void main(String[] args) 
 	{
        Apriori apriori=new Apriori();
-       
+       apriori.init();
 
 	}
 
