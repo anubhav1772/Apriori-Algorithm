@@ -52,6 +52,8 @@ public class Apriori
     	
     }
     
+    /* Function to count the number of occurences of a given itemset in the entire transaction dataset. */
+    /* step for support count of an itemset. */
     public int count(Set<Integer> s)
     {
     	int support=0;
