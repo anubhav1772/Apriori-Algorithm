@@ -12,5 +12,10 @@ public class Tuple
 		itemset=new HashSet<Integer>();
 		support=0;	
 	}
+	public Tuple(Set itemset,int support)
+	{
+		this.itemset=itemset;
+		this.support=support;
+	}
 	
 }
