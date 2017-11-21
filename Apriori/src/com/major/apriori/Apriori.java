@@ -52,6 +52,50 @@ public class Apriori
     	
     }
     
+    public int count(Set<Integer> s)
+    {
+    	int support=0;
+    	for(int i=0;i<dataset.length;i++)
+    	{
+    		boolean flag=false;
+    		int count=0;
+    		Iterator<Integer> it=s.iterator();
+    		int item_id;
+    		while(it.hasNext())
+    		{
+    			item_id=(int)it.next();
+    			for(int j=0;j<dataset[i].length;j++)
+    			{
+    				if(dataset[i][j]==item_id)
+    				{
+    					flag=true;
+    					++count;
+    					break;
+    				}
+    			}
+    			if(!flag)
+    			{
+    				break;
+    			}
+    			else
+    			{
+    				flag=false;
+    			}
+    		}
+    		if(count==s.size())
+    		{
+    			++support;
+    		}
+    		
+    	}
+    	return support;
+    }
+    
+    public void generateFrequentItemsets()
+    {
+    	
+    }
+    
     public void readDataset_csv()throws IOException
     {
     	String csv="/home/anubhav55182/eclipse-workspace/Apriori/apriori.csv";
