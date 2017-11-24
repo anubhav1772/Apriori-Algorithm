@@ -169,11 +169,19 @@ public class Apriori
     			
     	} // end of while loop 1
     	
-    	System.out.println("**** Most Ftequent Itemset ****");
-    	for(Tuple tuple : L) 
+    	System.out.println("\n**** Most Ftequent Itemset ****");
+    	if(L.isEmpty())
     	{
-			System.out.println(tuple.itemset + " : " + tuple.support);
-		}	
+    		System.out.printf("L%d doesn't contains any itemset with support count greater than 2.\n",(step-1));
+    		System.out.printf("Hence, L%d itemset(s) is the final result.",(step-2));
+    	}
+    	else
+    	{
+    		for(Tuple tuple : L) 
+        	{
+    			System.out.println(tuple.itemset + " : " + tuple.support);
+    		}
+    	}
     	
     }
     
