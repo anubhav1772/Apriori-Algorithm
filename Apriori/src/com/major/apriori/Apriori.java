@@ -19,6 +19,7 @@ public class Apriori
     Set<Tuple> L;
     int min_support;
     int dataset[][];
+    public static int step=1;
     
     public Apriori()
     {
@@ -34,6 +35,13 @@ public class Apriori
     {
     	L.clear();
     	Iterator<Tuple> it=C.iterator();
+    	/* loop to print candidate itemsets along with their support count. */
+    	System.out.printf("xxxxx----(C%d)----xxxxx\n",step);
+    	for(Tuple t:C)
+    	{
+    		System.out.println(t.itemset+" : "+t.support);
+    	}
+    	
     	Tuple record;
     	while(it.hasNext())
     	{
@@ -44,11 +52,21 @@ public class Apriori
     		}
     	}
     	
-    	System.out.println("xxxxx----L----xxxxx");
-    	for(Tuple t:L)
+    	/* loop to print itemsets and their support count after pruning. */
+    	System.out.printf("xxxxx----(L%d)----xxxxx\n",step);
+    	if(!L.isEmpty())
     	{
-    		System.out.println(t.itemset+" : "+t.support);
+    		for(Tuple t:L)
+        	{
+        		System.out.println(t.itemset+" : "+t.support);
+        	}
     	}
+    	else
+    	{ 
+    		System.out.println("Empty Set.");
+    		
+    	}
+    	++step;
     	
     }
    
@@ -260,10 +278,10 @@ public class Apriori
     		item=(int) it.next();
     		Set<Integer> s = new HashSet<>();
 			s.add(item);
-    		L.add(new Tuple(s,count(s)));
+    		C.add(new Tuple(s,count(s)));
     	}
     	/* to print first initial candidate elements along with their support */
-    /*	Iterator<Tuple> test=L.iterator();
+    /*	Iterator<Tuple> test=C.iterator();
     	while(test.hasNext())
     	{
     		Tuple t=test.next();
