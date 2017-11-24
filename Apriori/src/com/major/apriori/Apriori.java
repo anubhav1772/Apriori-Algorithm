@@ -200,9 +200,12 @@ public class Apriori
     			for(int j=0;j<items.length;j++)
     			{
     				dataset[count][j]=items[j].intValue();
+    				//System.out.print(dataset[count][j]+" ");
     			}
+    			//System.out.println();
     			++count;
     		}
+    		
     		
     		
     		
@@ -233,6 +236,15 @@ public class Apriori
     
     public void init()
     {
+    	try
+    	{
+    		readDataset_csv();
+    	}
+    	catch(IOException e)
+    	{
+    		e.printStackTrace();
+    	}
+    	
     	Set<Integer> candidate_set=new HashSet<Integer>();
     	for(int i=0;i<dataset.length;i++) 
     	{
@@ -250,6 +262,23 @@ public class Apriori
 			s.add(item);
     		L.add(new Tuple(s,count(s)));
     	}
+    	/* to print first initial candidate elements along with their support */
+    /*	Iterator<Tuple> test=L.iterator();
+    	while(test.hasNext())
+    	{
+    		Tuple t=test.next();
+    		Set<Integer> set=t.itemset;
+    		Iterator<Integer> itt=set.iterator();
+    		System.out.print("[ ");
+    		while(itt.hasNext())
+    		{
+    			
+    			System.out.print(itt.next()+" ");
+    			
+    		}
+    		System.out.println("] =>"+t.support+"");
+    		
+    	}*/
     	prune();
     	generateFrequentItemsets();
     }
