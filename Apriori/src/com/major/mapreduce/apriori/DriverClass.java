@@ -26,7 +26,9 @@ public class DriverClass
 	      
           job.setMapperClass(FrequentItemsetMapper.class);
           job.setReducerClass(FrequentItemsetReducer.class);
-          job.setPartitionerClass(FrequentItemsetPartioner.class);
+          //job.getPartitionerClass();
+          job.setPartitionerClass(ReducerAllocator.class);
+          //job.setPartitionerClass(Frequent.class);
           
           job.setNumReduceTasks(4);
           
