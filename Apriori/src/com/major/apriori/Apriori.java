@@ -312,7 +312,10 @@ public class Apriori
 	public static void main(String[] args) 
 	{
        Apriori apriori=new Apriori();
+       long start=System.currentTimeMillis();
        apriori.init();
+       long end=System.currentTimeMillis();
+       System.out.println("\nTime taken to run the Sequential Apriori Algorithm= "+(end-start)+"ms");
 
 	}
 
