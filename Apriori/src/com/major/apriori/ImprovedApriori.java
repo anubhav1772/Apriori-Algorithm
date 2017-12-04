@@ -69,9 +69,7 @@ public class ImprovedApriori
     			for(int j=0;j<items.length;j++)
     			{
     				dataset[count][j]=items[j].intValue();
-    				//System.out.print(dataset[count][j]+" ");
     			}
-    			//System.out.println();
     			++count;
     		}
     		
@@ -127,7 +125,7 @@ public class ImprovedApriori
     	{
     		item=(int) it.next();
     		Set<Integer> s = new HashSet<>();
-			s.add(item);
+	        s.add(item);
     		//C.add(new Record(s,count(s),-1,));
     	}
     
