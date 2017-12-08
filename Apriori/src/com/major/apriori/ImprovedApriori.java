@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.major.tuple.Record;
+import com.major.tuple.Tuple;
 
 public class ImprovedApriori 
 {
@@ -102,6 +103,41 @@ public class ImprovedApriori
     		}
     	}
     }
+	public void prune()   
+    {
+    	L.clear();
+    	Iterator<Record> it=C.iterator();
+    	for(Record t:C)
+    	{
+    		System.out.println(t.itemset+" : "+t.support+" : "+t.transactions);
+    	}
+    	System.out.println("*************************************************");
+    	
+    	Record record;
+    	while(it.hasNext())
+    	{
+    		record=it.next();
+    		if(record.support>=min_support)
+    		{
+    		   L.add(record);
+    		}
+    	}
+    	if(!L.isEmpty())
+    	{
+    		for(Record t:L)
+        	{
+        		System.out.println(t.itemset+" : "+t.support+" : "+t.transactions);
+        	}
+    	}
+    	else
+    	{ 
+    		System.out.println("Empty Set.");
+    		
+    	}
+    	++step;
+    	
+    }
+	
 	public void init()
     {
     	try
@@ -131,8 +167,7 @@ public class ImprovedApriori
     		C.add(new Record(s,count(s),-1,getTransactionsId(s)));
     	}
         
-    	
-    	//prune();
+    	prune();
     	//generateFrequentItemsets();
     }
 	
@@ -231,8 +266,6 @@ public class ImprovedApriori
 	    apriori.init();
 	   // long end=System.currentTimeMillis();
 	    //System.out.println("\nTime taken to run the Improved Apriori Algorithm= "+(end-start)+"ms");
-	    
-	    apriori.printCandidate();
 
 	}
 
