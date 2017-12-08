@@ -130,7 +130,8 @@ public class ImprovedApriori
 			s.add(item);
     		C.add(new Record(s,count(s),-1,getTransactionsId(s)));
     	}
-    
+        
+    	
     	//prune();
     	//generateFrequentItemsets();
     }
@@ -212,14 +213,26 @@ public class ImprovedApriori
 		}
 		return transactions;
 	}
+	
+	public void printCandidate()
+	{
+		Iterator<Record> it=C.iterator();
+		while(it.hasNext())
+		{
+			Record rec=(Record) it.next();
+			System.out.println(rec.itemset+" "+rec.support+" "+rec.min+" "+rec.transactions);
+		}
+	}
 
 	public static void main(String[] args) 
 	{
 		ImprovedApriori apriori=new ImprovedApriori();
-	    long start=System.currentTimeMillis();
+	   // long start=System.currentTimeMillis();
 	    apriori.init();
-	    long end=System.currentTimeMillis();
-	    System.out.println("\nTime taken to run the Improved Apriori Algorithm= "+(end-start)+"ms");
+	   // long end=System.currentTimeMillis();
+	    //System.out.println("\nTime taken to run the Improved Apriori Algorithm= "+(end-start)+"ms");
+	    
+	    apriori.printCandidate();
 
 	}
 
