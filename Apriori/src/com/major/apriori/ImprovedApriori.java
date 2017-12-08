@@ -33,7 +33,7 @@ public class ImprovedApriori
     	String csv="/home/anubhav55182/eclipse-workspace/Apriori/dataset.csv";
     	BufferedReader br=null;
     	String line="";
-    	Map<Integer,List<Integer>> map;       // <Transaction_id,List of Itemsets>
+    	Map<Integer,List<Integer>> map;       // <Transaction_id,List of itemsets>
     	List<Integer> temp;
     	try
     	{
