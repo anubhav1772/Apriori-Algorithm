@@ -173,6 +173,45 @@ public class ImprovedApriori
     	}
     	return support;
     }
+	
+	public Set<Integer> getTransactionsId(Set<Integer> s)
+	{
+		Set<Integer> transactions=new HashSet<Integer>();
+		for(int i=0;i<dataset.length;i++)
+		{
+			boolean flag=false;
+			int count=0;
+			Iterator<Integer> it=s.iterator();
+			int item_id;
+			while(it.hasNext())
+			{
+               item_id=(int) it.next();
+               for(int j=0;j<dataset[i].length;j++)
+               {
+            	   if(dataset[i][j]==item_id)
+            	   {
+            		   flag=true;
+            		   ++count;
+            		   break;
+            	   }
+               }
+               if(!flag)
+               {
+            	   break;
+               }
+               else
+               {
+            	   flag=false;
+               }
+               
+			}
+		    if(count==s.size())
+    		{
+    			transactions.add(i);
+    		}
+		}
+		return transactions;
+	}
 
 	public static void main(String[] args) 
 	{
