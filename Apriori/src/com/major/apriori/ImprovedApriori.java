@@ -69,7 +69,9 @@ public class ImprovedApriori
     			for(int j=0;j<items.length;j++)
     			{
     				dataset[count][j]=items[j].intValue();
+    				//System.out.print(dataset[count][j]+" ");
     			}
+    			//System.out.println();
     			++count;
     		}
     		
@@ -125,12 +127,51 @@ public class ImprovedApriori
     	{
     		item=(int) it.next();
     		Set<Integer> s = new HashSet<>();
-	        s.add(item);
-    		//C.add(new Record(s,count(s),-1,));
+			s.add(item);
+    		C.add(new Record(s,count(s),-1,getTransactionsId(s)));
     	}
     
     	//prune();
     	//generateFrequentItemsets();
+    }
+	
+	public int count(Set<Integer> s)
+    {
+    	int support=0;
+    	for(int i=0;i<dataset.length;i++)
+    	{
+    		boolean flag=false;
+    		int count=0;
+    		Iterator<Integer> it=s.iterator();
+    		int item_id;
+    		while(it.hasNext())
+    		{
+    			item_id=(int)it.next();
+    			for(int j=0;j<dataset[i].length;j++)
+    			{
+    				if(dataset[i][j]==item_id)
+    				{
+    					flag=true;
+    					++count;
+    					break;
+    				}
+    			}
+    			if(!flag)
+    			{
+    				break;
+    			}
+    			else
+    			{
+    				flag=false;
+    			}
+    		}
+    		if(count==s.size())
+    		{
+    			++support;
+    		}
+    		
+    	}
+    	return support;
     }
 
 	public static void main(String[] args) 
