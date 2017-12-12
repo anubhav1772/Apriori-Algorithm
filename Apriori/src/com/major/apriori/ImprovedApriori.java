@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.major.tuple.Record;
+import com.major.tuple.Tuple;
 
 public class ImprovedApriori 
 {
@@ -30,7 +31,7 @@ public class ImprovedApriori
 	    L=new HashSet<Record>();
 	    L1=new HashSet<Record>();
 	    item_support=new HashMap<Integer,Integer>();
-	    min_support=2;     
+	    min_support=3;     
 	 }
 	public void readDataset_csv()throws IOException
     {
@@ -43,7 +44,7 @@ public class ImprovedApriori
     	{
     		br=new BufferedReader(new FileReader(csv));
     		map=new HashMap<Integer,List<Integer>>();
-    		//line=br.readLine();
+    		
     		String transaction[];             // consists of purchased items id in a particular transaction
     		int i=1;
     		while((line=br.readLine())!=null)
@@ -110,11 +111,7 @@ public class ImprovedApriori
     {
     	L.clear();
     	Iterator<Record> it=C.iterator();
-    	/*for(Record t:C)
-    	{
-    		System.out.println(t.itemset+" : "+t.support+" : "+t.transactions);
-    	}
-    	System.out.println("*************************************************");*/
+    	printCandidate();
     	
     	Record record;
     	while(it.hasNext())
@@ -126,6 +123,8 @@ public class ImprovedApriori
     		}
     		
     	}
+
+    	printFrequentItems();
     	if(L1.isEmpty())
     	{
     		L1.addAll(L);
@@ -167,7 +166,6 @@ public class ImprovedApriori
 			s.add(item);
     		C.add(new Record(s,count(s),-1,getTransactionsId(s)));
     	}
-        
     	prune();
     	generateFrequentItemSet();
     }
@@ -260,72 +258,10 @@ public class ImprovedApriori
 		}
 	}
 	
-	public void generateFrequentItemSet()
+	public void printFrequentItems()
 	{
-		boolean flag=true;
-    	int size=1;
-    	Set<Set> candidate_set=new HashSet<Set>();
-    	int element=0;
-    	while(flag) //loop 1
-    	{
-    		C.clear();
-    		candidate_set.clear();
-    		Iterator<Record> it=L.iterator();
-    		Set<Integer> set;
-    		while(it.hasNext())  // while loop 2
-    		{
-    			set=it.next().itemset;
-    			Iterator<Record> _it=L1.iterator();
-    			Record rec;
-    			while(_it.hasNext()) // while loop 3
-    			{
-    				rec=_it.next();
-    				Iterator<Integer> _it_=rec.itemset.iterator();
-    				while(_it_.hasNext())
-    				{
-    					element=(int) _it_.next();
-    					set.add(element);    // add element to set
-    					if(set.size()==size)
-    					{
-    						candidate_set.add(set);
-    					}
-    					
-    				}
-    			    set.remove(element);     // remove element from set
-    			}  // end of while loop 3
-    			
-    		} // end of while loop 2
-    		
-    		Iterator<Set> iterator=candidate_set.iterator();
-        	Set s;
-        	System.out.println("=================================================================");
-        	while(iterator.hasNext())
-        	{
-        		s=(Set) iterator.next();
-        		Iterator<Integer> itt=s.iterator();
-        		Integer i, min=Integer.MAX_VALUE;
-                
-        		while(itt.hasNext())
-        		{
-        			i=itt.next();
-        			min=Math.min(min,item_support.get(min));
-        			
-        		}
-        	   Set<Integer> t=getTransactions(min);
-        	   C.add(new Record(s,sup_count(s,t),min,t));
-        	   System.out.println(s+" : "+t+" : "+min+" : "+t);
-        		
-        	}
-        	System.out.println("=================================================================");
-        	prune();
-        	if(L.size()<=1)
-        	{
-        		flag=false;
-        	}
-        	++size;
-    	}
-    	
-   /* 	System.out.println("\n**** Most Ftequent Itemset ****");
+		System.out.println("*************************************************");
+		System.out.println("\n**** Most Ftequent Itemset ****");
     	if(L.isEmpty())
     	{
     		System.out.printf("L%d doesn't contains any itemset with support count greater than 2.\n",(step-1));
@@ -333,12 +269,41 @@ public class ImprovedApriori
     	}
     	else
     	{
-    		for(Record record : L) 
+    		for(Record t:L)
         	{
-    			System.out.println(record.itemset + " : " +record.support+" : "+record.min+" : " +record.transactions);
-    		}
-    	} */
+        		System.out.println(t.itemset+" : "+t.support+" : "+t.min+" : "+t.transactions);
+        	}
+    	}
     	
+    	System.out.println("*************************************************");
+	}
+	
+	
+
+	
+	public Set<Integer> getTransactions(int item_id)
+	{
+		Set<Integer> trans=new HashSet<Integer>();
+		Iterator<Record> t=L1.iterator();
+		while(t.hasNext())
+		{
+			Record rr=t.next();
+			Set<Integer> itemset=rr.itemset;
+			//System.out.print(itemset+" ");
+		    Iterator<Integer> itt=itemset.iterator();
+			int i;
+			while(itt.hasNext())
+			{
+				i=itt.next();
+			 	if(i==item_id)
+				{
+			 		trans.addAll(rr.transactions);
+			 		break;
+				}
+			}
+		}
+		
+	  return trans;
 	}
 	
 	public int sup_count(Set<Integer> items,Set<Integer> transactions)
@@ -372,33 +337,81 @@ public class ImprovedApriori
 		return sup;
 	}
 	
-	public Set<Integer> getTransactions(int item_id)
+	public void generateFrequentItemSet()
 	{
-		Set<Integer> trans=new HashSet<Integer>();
-		Iterator<Record> t=L1.iterator();
-		while(t.hasNext())
-		{
-			Record rr=t.next();
-			Set<Integer> itemset=rr.itemset;
-		    Iterator<Integer> itt=itemset.iterator();
-			int i;
-			while(itt.hasNext())
-			{
-				i=itt.next();
-			 	if(i==item_id)
-				{
-			 		trans.addAll(rr.transactions);
-			 		break;
-				}
-			}
-		}
-		
-	  return trans;
+		boolean flag=true;
+    	int size=2;
+    	Set<Set<Integer>> candidate_set=new HashSet<Set<Integer>>();
+    	while(flag) //loop 1
+    	{
+    		C.clear();
+    		candidate_set.clear();
+    		Iterator<Record> it=L.iterator();
+    		Set<Integer> L_itemset;
+    		while(it.hasNext())  // while loop 2
+    		{
+    			L_itemset=it.next().itemset;
+    			Iterator<Record> _it=L1.iterator();
+    			Set<Integer> L1_itemset;
+    			while(_it.hasNext()) // while loop 3
+    			{
+    				    L1_itemset=_it.next().itemset;
+    				    Set<Integer> combined=new HashSet<Integer>(L_itemset);
+    				    combined.addAll(L1_itemset);
+    				    candidate_set.add(combined);
+    				    
+    				
+    			}  // end of while loop 3
+    			
+    		} // end of while loop 2
+    		
+    		Iterator<Set<Integer>> iterator=candidate_set.iterator();
+        	Set s;
+        	while(iterator.hasNext())
+        	{
+        		s=(Set) iterator.next();
+        		if(s.size()==size)
+        		{
+        			Iterator<Integer> itt=s.iterator();
+            		Integer i, min=Integer.MAX_VALUE;
+                    
+            		while(itt.hasNext())
+            		{
+            			i=itt.next();
+            			if(min==Integer.MAX_VALUE)
+            			{
+            				min=i;
+            				
+            			}
+            			else
+            			{
+            				if(item_support.get(min)>item_support.get(i))
+            				{
+            					min=i;	
+            				}
+            			}
+            			
+            		}
+            	   Set<Integer> t=getTransactions(min);
+            	  // System.out.println("("+t+")");
+            	   C.add(new Record(s,sup_count(s,t),min,t));
+        		}
+        	   //System.out.println(s+" : "+t+" : "+min+" : "+t);*/
+        		
+        	}
+        	prune();
+        	if(L.size()<=1)
+        	{
+        		flag=false;
+        	}
+        	++size;
+    	}
+    	
 	}
 
 	public static void main(String[] args) 
 	{
-		ImprovedApriori apriori=new ImprovedApriori();
+		ImprovedApriori  apriori=new ImprovedApriori();
 	    long start=System.currentTimeMillis();
 	    apriori.init();
 	    long end=System.currentTimeMillis();
