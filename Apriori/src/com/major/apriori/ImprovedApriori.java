@@ -340,6 +340,20 @@ public class ImprovedApriori
         	++size;
     	}
     	
+    	System.out.println("\n**** Most Ftequent Itemset ****");
+    	if(L.isEmpty())
+    	{
+    		System.out.printf("L%d doesn't contains any itemset with support count greater than 2.\n",(step-1));
+    		System.out.printf("Hence, L%d itemset(s) is the final result.",(step-2));
+    	}
+    	else
+    	{
+    		for(Record record : L) 
+        	{
+    			System.out.println(record.itemset + " : " +record.support+" : "+record.min+" : " +record.transactions);
+    		}
+    	}
+    	
 	}
 	
 	public int sup_count(Set<Integer> items,Set<Integer> transactions)
