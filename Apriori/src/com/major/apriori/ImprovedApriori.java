@@ -22,17 +22,13 @@ public class ImprovedApriori
 	 Set<Record> L1; // L1= first L set
 	 int min_support;
 	 int dataset[][];
-	 HashMap<Integer,Integer> prunedKey; // for tracking which elements are left after first pruning technique;
 	 public static int step=1;
-	 private boolean flag;
 	 
 	 public ImprovedApriori()
 	 {
 	    C=new HashSet<Record>();
 	    L=new HashSet<Record>();
 	    L1=new HashSet<Record>();
-	    prunedKey=new HashMap<Integer,Integer>();
-	    flag=false;
 	    min_support=2;     
 	 }
 	public void readDataset_csv()throws IOException
@@ -127,26 +123,14 @@ public class ImprovedApriori
     		{
     		   L.add(record);
     		}
-    		else
-    		{
-    			if(!flag)
-    			{
-    				for(int elem:record.itemset)
-    				{
-    					prunedKey.put(elem, 1);
-    				}
-    			}
-    		}
+    		
     	}
     	flag=true;
     	if(L1.isEmpty())
     	{
     		L1.addAll(L);
     	}
-    	/*for(Integer key:prunedKey.keySet())
-    	{
-    		System.out.println(key+" ");
-    	}
+    	
     	/*if(!L1.isEmpty())
     	{
     		for(Record t:L1)
