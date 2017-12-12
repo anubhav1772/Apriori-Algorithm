@@ -22,6 +22,7 @@ public class ImprovedApriori
 	 Set<Record> L1; // L1= first L set
 	 int min_support;
 	 int dataset[][];
+	 HashMap<Integer,Integer> item_support; //stores item id and its corresponding support count
 	 public static int step=1;
 	 
 	 public ImprovedApriori()
@@ -29,6 +30,7 @@ public class ImprovedApriori
 	    C=new HashSet<Record>();
 	    L=new HashSet<Record>();
 	    L1=new HashSet<Record>();
+	    item_support=new HashMap<Integer,Integer>();
 	    min_support=2;     
 	 }
 	public void readDataset_csv()throws IOException
@@ -125,11 +127,19 @@ public class ImprovedApriori
     		}
     		
     	}
-    	flag=true;
     	if(L1.isEmpty())
     	{
     		L1.addAll(L);
+    		for(Record r:L1)
+    		{
+    			item_support.put(r.itemset.iterator().next(), r.support);
+    		}
     	}
+    	
+    /*	for(Map.Entry<Integer, Integer> x:item_support.entrySet())
+    	{
+    		System.out.println(x.getKey()+" "+x.getValue());
+    	}*/
     	
     	/*if(!L1.isEmpty())
     	{
@@ -283,7 +293,7 @@ public class ImprovedApriori
     		while(it.hasNext())  // while loop 2
     		{
     			set=it.next().itemset;
-    			Iterator<Record> _it=L.iterator();
+    			Iterator<Record> _it=L1.iterator();
     			Record rec;
     			while(_it.hasNext()) // while loop 3
     			{
@@ -292,19 +302,15 @@ public class ImprovedApriori
     				while(_it_.hasNext())
     				{
     					element=(int) _it_.next();
-    					set.add(element);
-    					if(set.size()!=size)
+    					set.add(element);    // add element to set
+    					if(set.size()==size)
     					{
-    						Integer arr[]=set.toArray(new Integer[0]);
-    						Set<Integer> temp=new HashSet<Integer>();
-    						for(Integer i:arr)
-    						{
-    							temp.add(i);
-    						}
-    						candidate_set.add(temp);
-    						set.remove(element);
+    						
     					}
+    					
     				}
+    				candidate_set.add(set);
+					set.remove(element);     // remove element from set
     			}  // end of while loop 3
     			
     		} // end of while loop 2
