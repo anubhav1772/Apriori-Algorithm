@@ -35,7 +35,7 @@ public class ImprovedApriori
 	 }
 	public void readDataset_csv()throws IOException
     {
-    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/dataset.csv";
+    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/apriori.csv";
     	BufferedReader br=null;
     	String line="";
     	Map<Integer,List<Integer>> map;       // <Transaction_id,List of itemsets>
@@ -250,6 +250,8 @@ public class ImprovedApriori
 	
 	public void printCandidate()
 	{
+		System.out.printf("=============++++++++++(C%d)++++++++++=============", step);
+		System.out.println("\n************** Candidate Itemsets *************");
 		Iterator<Record> it=C.iterator();
 		while(it.hasNext())
 		{
@@ -260,8 +262,8 @@ public class ImprovedApriori
 	
 	public void printFrequentItems()
 	{
-		System.out.println("*************************************************");
-		System.out.println("\n**** Most Ftequent Itemset ****");
+		System.out.printf("=============++++++++++(L%d)++++++++++=============", step);
+		System.out.println("\n************ Most Frequent Itemset *************");
     	if(L.isEmpty())
     	{
     		System.out.printf("L%d doesn't contains any itemset with support count greater than 2.\n",(step-1));
@@ -275,7 +277,7 @@ public class ImprovedApriori
         	}
     	}
     	
-    	System.out.println("*************************************************");
+    	System.out.println("**************************************************");
 	}
 	
 	
@@ -340,8 +342,8 @@ public class ImprovedApriori
 	public void generateFrequentItemSet()
 	{
 		boolean flag=true;
-    	int size=2;
     	Set<Set<Integer>> candidate_set=new HashSet<Set<Integer>>();
+    	int size=1;
     	while(flag) //loop 1
     	{
     		C.clear();
@@ -370,7 +372,7 @@ public class ImprovedApriori
         	while(iterator.hasNext())
         	{
         		s=(Set) iterator.next();
-        		if(s.size()==size)
+        		if(s.size()==step)
         		{
         			Iterator<Integer> itt=s.iterator();
             		Integer i, min=Integer.MAX_VALUE;
