@@ -34,7 +34,7 @@ public class ImprovedApriori
 	    min_support=3;     
 	 }
 	public void readDataset_csv()throws IOException
-    {
+        {
     	String csv="/home/anubhav55182/eclipse-workspace/Apriori/apriori.csv";
     	BufferedReader br=null;
     	String line="";
@@ -107,7 +107,7 @@ public class ImprovedApriori
     		}
     	}
     }
-	public void prune()   
+  public void prune()   
     {
     	L.clear();
     	Iterator<Record> it=C.iterator();
@@ -138,7 +138,7 @@ public class ImprovedApriori
     	
     }
 	
-	public void init()
+   public void init()
     {
     	try
     	{
@@ -170,7 +170,7 @@ public class ImprovedApriori
     	generateFrequentItemSet();
     }
 	
-	public int count(Set<Integer> s)
+   public int count(Set<Integer> s)
     {
     	int support=0;
     	for(int i=0;i<dataset.length;i++)
@@ -209,7 +209,7 @@ public class ImprovedApriori
     	return support;
     }
 	
-	public Set<Integer> getTransactionsId(Set<Integer> s)
+    public Set<Integer> getTransactionsId(Set<Integer> s)
 	{
 		Set<Integer> transactions=new HashSet<Integer>();
 		for(int i=0;i<dataset.length;i++)
@@ -248,7 +248,7 @@ public class ImprovedApriori
 		return transactions;
 	}
 	
-	public void printCandidate()
+    public void printCandidate()
 	{
 		System.out.printf("=============++++++++++(C%d)++++++++++=============", step);
 		System.out.println("\n************** Candidate Itemsets *************");
@@ -260,7 +260,7 @@ public class ImprovedApriori
 		}
 	}
 	
-	public void printFrequentItems()
+    public void printFrequentItems()
 	{
 		System.out.printf("=============++++++++++(L%d)++++++++++=============", step);
 		System.out.println("\n************ Most Frequent Itemset *************");
@@ -281,9 +281,7 @@ public class ImprovedApriori
 	}
 	
 	
-
-	
-	public Set<Integer> getTransactions(int item_id)
+    public Set<Integer> getTransactions(int item_id)
 	{
 		Set<Integer> trans=new HashSet<Integer>();
 		Iterator<Record> t=L1.iterator();
@@ -308,7 +306,7 @@ public class ImprovedApriori
 	  return trans;
 	}
 	
-	public int sup_count(Set<Integer> items,Set<Integer> transactions)
+    public int sup_count(Set<Integer> items,Set<Integer> transactions)
 	{
 		int sup=0;
 		Iterator<Integer> it=transactions.iterator();
@@ -339,7 +337,7 @@ public class ImprovedApriori
 		return sup;
 	}
 	
-	public void generateFrequentItemSet()
+     public void generateFrequentItemSet()
 	{
 		boolean flag=true;
     	Set<Set<Integer>> candidate_set=new HashSet<Set<Integer>>();
@@ -410,8 +408,8 @@ public class ImprovedApriori
     	}
     	
 	}
-
-	public static void main(String[] args) 
+    
+   public static void main(String[] args) 
 	{
 		ImprovedApriori  apriori=new ImprovedApriori();
 	    long start=System.currentTimeMillis();
