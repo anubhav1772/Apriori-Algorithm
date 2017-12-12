@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.major.tuple.Record;
-import com.major.tuple.Tuple;
 
 public class ImprovedApriori 
 {
@@ -111,11 +110,11 @@ public class ImprovedApriori
     {
     	L.clear();
     	Iterator<Record> it=C.iterator();
-    	for(Record t:C)
+    	/*for(Record t:C)
     	{
     		System.out.println(t.itemset+" : "+t.support+" : "+t.transactions);
     	}
-    	System.out.println("*************************************************");
+    	System.out.println("*************************************************");*/
     	
     	Record record;
     	while(it.hasNext())
@@ -135,24 +134,7 @@ public class ImprovedApriori
     			item_support.put(r.itemset.iterator().next(), r.support);
     		}
     	}
-    	
-    /*	for(Map.Entry<Integer, Integer> x:item_support.entrySet())
-    	{
-    		System.out.println(x.getKey()+" "+x.getValue());
-    	}*/
-    	
-    	/*if(!L1.isEmpty())
-    	{
-    		for(Record t:L1)
-        	{
-        		System.out.println(t.itemset+" : "+t.support+" : "+t.transactions);
-        	}
-    	}
-    	else
-    	{ 
-    		System.out.println("Empty Set.");
-    		
-    	}*/
+  
     	++step;
     	
     }
@@ -316,22 +298,25 @@ public class ImprovedApriori
     		
     		Iterator<Set> iterator=candidate_set.iterator();
         	Set s;
+        	System.out.println("=================================================================");
         	while(iterator.hasNext())
         	{
         		s=(Set) iterator.next();
-        		Iterator itt=s.iterator();
-        		Integer i,min=Integer.MAX_VALUE;
-        	    
+        		Iterator<Integer> itt=s.iterator();
+        		Integer i, min=Integer.MAX_VALUE;
+                
         		while(itt.hasNext())
         		{
-        			i=(Integer) itt.next();
-        			min=Math.min(min,i);
+        			i=itt.next();
+        			min=Math.min(min,item_support.get(min));
         			
         		}
         	   Set<Integer> t=getTransactions(min);
         	   C.add(new Record(s,sup_count(s,t),min,t));
+        	   System.out.println(s+" : "+t+" : "+min+" : "+t);
         		
         	}
+        	System.out.println("=================================================================");
         	prune();
         	if(L.size()<=1)
         	{
@@ -340,7 +325,7 @@ public class ImprovedApriori
         	++size;
     	}
     	
-    	System.out.println("\n**** Most Ftequent Itemset ****");
+   /* 	System.out.println("\n**** Most Ftequent Itemset ****");
     	if(L.isEmpty())
     	{
     		System.out.printf("L%d doesn't contains any itemset with support count greater than 2.\n",(step-1));
@@ -352,7 +337,7 @@ public class ImprovedApriori
         	{
     			System.out.println(record.itemset + " : " +record.support+" : "+record.min+" : " +record.transactions);
     		}
-    	}
+    	} */
     	
 	}
 	
@@ -393,19 +378,22 @@ public class ImprovedApriori
 		Iterator<Record> t=L1.iterator();
 		while(t.hasNext())
 		{
-			Set<Integer> itemset=t.next().itemset;
-			Iterator<Integer> itemIt=itemset.iterator();
+			Record rr=t.next();
+			Set<Integer> itemset=rr.itemset;
+		    Iterator<Integer> itt=itemset.iterator();
 			int i;
-			while(itemIt.hasNext())
+			while(itt.hasNext())
 			{
-				i=itemIt.next();
-				if(i==item_id)
+				i=itt.next();
+			 	if(i==item_id)
 				{
-					trans.addAll(t.next().transactions);
+			 		trans.addAll(rr.transactions);
+			 		break;
 				}
 			}
 		}
-		return trans;
+		
+	  return trans;
 	}
 
 	public static void main(String[] args) 
