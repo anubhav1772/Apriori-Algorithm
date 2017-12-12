@@ -19,14 +19,20 @@ public class ImprovedApriori
 {
 	 Set<Record> C;
 	 Set<Record> L;
+	 Set<Record> L1; // L1= first L set
 	 int min_support;
 	 int dataset[][];
+	 HashMap<Integer,Integer> prunedKey; // for tracking which elements are left after first pruning technique;
 	 public static int step=1;
-	    
+	 private boolean flag;
+	 
 	 public ImprovedApriori()
 	 {
 	    C=new HashSet<Record>();
 	    L=new HashSet<Record>();
+	    L1=new HashSet<Record>();
+	    prunedKey=new HashMap<Integer,Integer>();
+	    flag=false;
 	    min_support=2;     
 	 }
 	public void readDataset_csv()throws IOException
@@ -121,10 +127,29 @@ public class ImprovedApriori
     		{
     		   L.add(record);
     		}
+    		else
+    		{
+    			if(!flag)
+    			{
+    				for(int elem:record.itemset)
+    				{
+    					prunedKey.put(elem, 1);
+    				}
+    			}
+    		}
     	}
-    	if(!L.isEmpty())
+    	flag=true;
+    	if(L1.isEmpty())
     	{
-    		for(Record t:L)
+    		L1.addAll(L);
+    	}
+    	/*for(Integer key:prunedKey.keySet())
+    	{
+    		System.out.println(key+" ");
+    	}
+    	/*if(!L1.isEmpty())
+    	{
+    		for(Record t:L1)
         	{
         		System.out.println(t.itemset+" : "+t.support+" : "+t.transactions);
         	}
@@ -133,7 +158,7 @@ public class ImprovedApriori
     	{ 
     		System.out.println("Empty Set.");
     		
-    	}
+    	}*/
     	++step;
     	
     }
@@ -257,6 +282,50 @@ public class ImprovedApriori
 			Record rec=(Record) it.next();
 			System.out.println(rec.itemset+" "+rec.support+" "+rec.min+" "+rec.transactions);
 		}
+	}
+	
+	public void generateFrequentItemSet()
+	{
+		boolean flag=true;
+    	int size=1;
+    	Set<Set> candidate_set=new HashSet<Set>();
+    	int element=0;
+    	while(flag) //loop 1
+    	{
+    		C.clear();
+    		candidate_set.clear();
+    		Iterator<Record> it=L.iterator();
+    		Set<Integer> set;
+    		while(it.hasNext())  // while loop 2
+    		{
+    			set=it.next().itemset;
+    			Iterator<Record> _it=L.iterator();
+    			Record rec;
+    			while(_it.hasNext()) // while loop 3
+    			{
+    				rec=_it.next();
+    				Iterator<Integer> _it_=rec.itemset.iterator();
+    				while(_it_.hasNext())
+    				{
+    					element=(int) _it_.next();
+    					set.add(element);
+    					if(set.size()!=size)
+    					{
+    						Integer arr[]=set.toArray(new Integer[0]);
+    						Set<Integer> temp=new HashSet<Integer>();
+    						for(Integer i:arr)
+    						{
+    							temp.add(i);
+    						}
+    						candidate_set.add(temp);
+    						set.remove(element);
+    					}
+    				}
+    			}  // end of while loop 3
+    			
+    		} // end of while loop 2
+    	}
+    	
 	}
 
 	public static void main(String[] args) 
