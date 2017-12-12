@@ -187,7 +187,7 @@ public class ImprovedApriori
     	}
         
     	prune();
-    	//generateFrequentItemsets();
+    	generateFrequentItemSet();
     }
 	
 	public int count(Set<Integer> s)
@@ -305,26 +305,102 @@ public class ImprovedApriori
     					set.add(element);    // add element to set
     					if(set.size()==size)
     					{
-    						
+    						candidate_set.add(set);
     					}
     					
     				}
-    				candidate_set.add(set);
-					set.remove(element);     // remove element from set
+    			    set.remove(element);     // remove element from set
     			}  // end of while loop 3
     			
     		} // end of while loop 2
+    		
+    		Iterator<Set> iterator=candidate_set.iterator();
+        	Set s;
+        	while(iterator.hasNext())
+        	{
+        		s=(Set) iterator.next();
+        		Iterator itt=s.iterator();
+        		Integer i,min=Integer.MAX_VALUE;
+        	    
+        		while(itt.hasNext())
+        		{
+        			i=(Integer) itt.next();
+        			min=Math.min(min,i);
+        			
+        		}
+        	   Set<Integer> t=getTransactions(min);
+        	   C.add(new Record(s,sup_count(s,t),min,t));
+        		
+        	}
+        	prune();
+        	if(L.size()<=1)
+        	{
+        		flag=false;
+        	}
+        	++size;
     	}
     	
+	}
+	
+	public int sup_count(Set<Integer> items,Set<Integer> transactions)
+	{
+		int sup=0;
+		Iterator<Integer> it=transactions.iterator();
+		Integer i;
+		while(it.hasNext())
+		{
+		  i=it.next();
+		  int count=0;
+		  Iterator<Integer> itt=items.iterator();
+		  int item;
+		  while(itt.hasNext())
+		  {
+			  item=(int) itt.next();
+			  for(int j=0;j<dataset[i].length;j++)
+			  {
+				  if(dataset[i][j]==item)
+				  {
+					  ++count;
+					  break;
+				  }  
+			  }
+		  }
+		  if(count==items.size())
+		  {
+			  ++sup;
+		  }
+		}
+		return sup;
+	}
+	
+	public Set<Integer> getTransactions(int item_id)
+	{
+		Set<Integer> trans=new HashSet<Integer>();
+		Iterator<Record> t=L1.iterator();
+		while(t.hasNext())
+		{
+			Set<Integer> itemset=t.next().itemset;
+			Iterator<Integer> itemIt=itemset.iterator();
+			int i;
+			while(itemIt.hasNext())
+			{
+				i=itemIt.next();
+				if(i==item_id)
+				{
+					trans.addAll(t.next().transactions);
+				}
+			}
+		}
+		return trans;
 	}
 
 	public static void main(String[] args) 
 	{
 		ImprovedApriori apriori=new ImprovedApriori();
-	   // long start=System.currentTimeMillis();
+	    long start=System.currentTimeMillis();
 	    apriori.init();
-	   // long end=System.currentTimeMillis();
-	    //System.out.println("\nTime taken to run the Improved Apriori Algorithm= "+(end-start)+"ms");
+	    long end=System.currentTimeMillis();
+	    System.out.println("\nTime taken to run the Improved Apriori Algorithm= "+(end-start)+"ms");
 
 	}
 
