@@ -25,6 +25,7 @@ public class ImprovedApriori
 	 int dataset[][];
 	 HashMap<Integer,Integer> item_support; //stores item id and its corresponding support count
 	 public static int step=1;
+	 int size;
 	 
 	 public ImprovedApriori()
 	 {
@@ -33,11 +34,12 @@ public class ImprovedApriori
 	    L1=new HashSet<Record>();
 	    prev=new HashSet<Record>();
 	    item_support=new HashMap<Integer,Integer>();
-	    min_support=3;     
+	    min_support=3;   
+	    size=2;
 	 }
 	public void readDataset_csv()throws IOException
     {
-    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/dataset.csv";
+    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/apriori.csv";
     	BufferedReader br=null;
     	String line="";
     	Map<Integer,List<Integer>> map;       // <Transaction_id,List of itemsets>
@@ -111,10 +113,6 @@ public class ImprovedApriori
     }
 	public void prune()   
     {
-		if(step>1)
-		{
-			prev.addAll(L);
-		}
     	L.clear();
     	Iterator<Record> it=C.iterator();
     	printCandidate();
@@ -272,12 +270,15 @@ public class ImprovedApriori
 		System.out.println("\n************ Most Frequent Itemset *************");
     	if(L.isEmpty())
     	{
-    		System.out.printf("L%d doesn't contains any itemset with support count greater than 2.\n",(step-1));
-    		System.out.printf("Hence, L%d itemset(s) is the final result.",(step-2));
+    		System.out.printf("L%d doesn't contains any itemset.\n",(size));
+    		System.out.printf("Hence, L%d itemset(s) is the final result.\n",(size-1));
+    		System.out.println("====================================================");
     		for(Record t:prev)
         	{
         		System.out.println(t.itemset+" : "+t.support+" : "+t.min+" : "+t.transactions);
         	}
+    		System.out.println("====================================================");
+    		
     	}
     	else
     	{
@@ -353,7 +354,7 @@ public class ImprovedApriori
 	{
 		boolean flag=true;
     	Set<Set<Integer>> candidate_set=new HashSet<Set<Integer>>();
-    	int size=1;
+        //size=1;
     	while(flag) //loop 1
     	{
     		C.clear();
@@ -412,6 +413,14 @@ public class ImprovedApriori
         		
         	}
         	prune();
+        	if(size>1)
+    		{
+        		if(prev.size()>0 && L.size()>1)
+        		{
+        			prev=null;
+        		}
+    			prev.addAll(L);
+    		}
         	if(L.size()<=1)
         	{
         		flag=false;
