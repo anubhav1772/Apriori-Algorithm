@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.major.tuple.Record;
 import com.major.tuple.Tuple;
 
 public class Apriori 
 {
     Set<Tuple> C;
     Set<Tuple> L;
+    Set<Tuple> prev; 
     int min_support;
     int dataset[][];
     public static int step=1;
@@ -25,7 +27,8 @@ public class Apriori
     {
        C=new HashSet<Tuple>();
        L=new HashSet<Tuple>();
-       min_support=2;     
+       prev=new HashSet<Tuple>();
+       min_support=3;     
     }
     
     /* In this step, we eliminate itemsets having support count less than required minimum support count. */
@@ -64,7 +67,12 @@ public class Apriori
     	else
     	{ 
     		System.out.println("Empty Set.");
-    		
+    		System.out.printf("Final Frequent Itemset with support count atleast %d",min_support);
+    		System.out.println("xxxxxxxxxxxxxxxxxx--------------xxxxxxxxxxxxxxxxxxxx");
+    		for(Tuple t:prev)
+        	{
+        		System.out.println(t.itemset+" : "+t.support);
+        	}
     	}
     	++step;
     	
@@ -187,7 +195,7 @@ public class Apriori
     
     public void readDataset_csv()throws IOException
     {
-    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/apriori.csv";
+    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/retail_dataset.csv";
     	BufferedReader br=null;
     	String line="";
     	Map<Integer,List<Integer>> map;       // <Transaction_id,List of Itemsets>
@@ -201,7 +209,7 @@ public class Apriori
     		int i=1;
     		while((line=br.readLine())!=null)
     		{
-    			transaction=line.split(",");
+    			transaction=line.split(" ");
     			Integer id;                    // items id
     			temp=new LinkedList<Integer>();
     			for(String s:transaction)
