@@ -20,6 +20,7 @@ public class ImprovedApriori
 	 Set<Record> C;
 	 Set<Record> L;
 	 Set<Record> L1; // L1= first L set
+	 Set<Record> prev;
 	 int min_support;
 	 int dataset[][];
 	 HashMap<Integer,Integer> item_support; //stores item id and its corresponding support count
@@ -30,12 +31,13 @@ public class ImprovedApriori
 	    C=new HashSet<Record>();
 	    L=new HashSet<Record>();
 	    L1=new HashSet<Record>();
+	    prev=new HashSet<Record>();
 	    item_support=new HashMap<Integer,Integer>();
 	    min_support=3;     
 	 }
 	public void readDataset_csv()throws IOException
-        {
-    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/apriori.csv";
+    {
+    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/dataset.csv";
     	BufferedReader br=null;
     	String line="";
     	Map<Integer,List<Integer>> map;       // <Transaction_id,List of itemsets>
@@ -107,8 +109,12 @@ public class ImprovedApriori
     		}
     	}
     }
-  public void prune()   
+	public void prune()   
     {
+		if(step>1)
+		{
+			prev.addAll(L);
+		}
     	L.clear();
     	Iterator<Record> it=C.iterator();
     	printCandidate();
@@ -138,7 +144,7 @@ public class ImprovedApriori
     	
     }
 	
-   public void init()
+	public void init()
     {
     	try
     	{
@@ -170,7 +176,7 @@ public class ImprovedApriori
     	generateFrequentItemSet();
     }
 	
-   public int count(Set<Integer> s)
+	public int count(Set<Integer> s)
     {
     	int support=0;
     	for(int i=0;i<dataset.length;i++)
@@ -209,7 +215,7 @@ public class ImprovedApriori
     	return support;
     }
 	
-    public Set<Integer> getTransactionsId(Set<Integer> s)
+	public Set<Integer> getTransactionsId(Set<Integer> s)
 	{
 		Set<Integer> transactions=new HashSet<Integer>();
 		for(int i=0;i<dataset.length;i++)
@@ -248,7 +254,7 @@ public class ImprovedApriori
 		return transactions;
 	}
 	
-    public void printCandidate()
+	public void printCandidate()
 	{
 		System.out.printf("=============++++++++++(C%d)++++++++++=============", step);
 		System.out.println("\n************** Candidate Itemsets *************");
@@ -260,7 +266,7 @@ public class ImprovedApriori
 		}
 	}
 	
-    public void printFrequentItems()
+	public void printFrequentItems()
 	{
 		System.out.printf("=============++++++++++(L%d)++++++++++=============", step);
 		System.out.println("\n************ Most Frequent Itemset *************");
@@ -268,6 +274,10 @@ public class ImprovedApriori
     	{
     		System.out.printf("L%d doesn't contains any itemset with support count greater than 2.\n",(step-1));
     		System.out.printf("Hence, L%d itemset(s) is the final result.",(step-2));
+    		for(Record t:prev)
+        	{
+        		System.out.println(t.itemset+" : "+t.support+" : "+t.min+" : "+t.transactions);
+        	}
     	}
     	else
     	{
@@ -281,7 +291,9 @@ public class ImprovedApriori
 	}
 	
 	
-    public Set<Integer> getTransactions(int item_id)
+
+	
+	public Set<Integer> getTransactions(int item_id)
 	{
 		Set<Integer> trans=new HashSet<Integer>();
 		Iterator<Record> t=L1.iterator();
@@ -306,7 +318,7 @@ public class ImprovedApriori
 	  return trans;
 	}
 	
-    public int sup_count(Set<Integer> items,Set<Integer> transactions)
+	public int sup_count(Set<Integer> items,Set<Integer> transactions)
 	{
 		int sup=0;
 		Iterator<Integer> it=transactions.iterator();
@@ -337,7 +349,7 @@ public class ImprovedApriori
 		return sup;
 	}
 	
-     public void generateFrequentItemSet()
+	public void generateFrequentItemSet()
 	{
 		boolean flag=true;
     	Set<Set<Integer>> candidate_set=new HashSet<Set<Integer>>();
@@ -408,14 +420,14 @@ public class ImprovedApriori
     	}
     	
 	}
-    
-   public static void main(String[] args) 
+
+	public static void main(String[] args) 
 	{
 		ImprovedApriori  apriori=new ImprovedApriori();
 	    long start=System.currentTimeMillis();
 	    apriori.init();
 	    long end=System.currentTimeMillis();
-	    System.out.println("\nTime taken to run the Improved Apriori Algorithm= "+(end-start)+"ms");
+	    System.out.println("\nTime taken to run the Improved Apriori Algorithm= "+(end-start)+"s");
 
 	}
 
