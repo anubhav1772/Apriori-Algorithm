@@ -54,6 +54,10 @@ public class Apriori
     		   L.add(record);
     		}
     	}
+    	if(step>1)
+    	{
+    		prev.addAll(L);
+    	}
     	
     	/* loop to print itemsets and their support count after pruning. */
     	System.out.printf("xxxxx----(L%d)----xxxxx\n",step);
@@ -67,12 +71,7 @@ public class Apriori
     	else
     	{ 
     		System.out.println("Empty Set.");
-    		System.out.printf("Final Frequent Itemset with support count atleast %d",min_support);
-    		System.out.println("xxxxxxxxxxxxxxxxxx--------------xxxxxxxxxxxxxxxxxxxx");
-    		for(Tuple t:prev)
-        	{
-        		System.out.println(t.itemset+" : "+t.support);
-        	}
+    		
     	}
     	++step;
     	
@@ -177,11 +176,19 @@ public class Apriori
     			
     	} // end of while loop 1
     	
-    	System.out.println("\n**** Most Ftequent Itemset ****");
+    	System.out.println("\n**** Most Frequent Itemset ****");
     	if(L.isEmpty())
     	{
     		System.out.printf("L%d doesn't contains any itemset with support count greater than 2.\n",(step-1));
     		System.out.printf("Hence, L%d itemset(s) is the final result.",(step-2));
+    		System.out.printf("Final Frequent Itemset with support count atleast %d",min_support);
+    		System.out.println("\nxxxxxxxxxxxxxxxxxx--------------xxxxxxxxxxxxxxxxxxxx");
+    		for(Tuple t:prev)
+        	{
+        		System.out.println(t.itemset+" : "+t.support);
+        	}
+    		System.out.println("xxxxxxxxxxxxxxxxxx--------------xxxxxxxxxxxxxxxxxxxx");
+    		
     	}
     	else
     	{
@@ -195,7 +202,7 @@ public class Apriori
     
     public void readDataset_csv()throws IOException
     {
-    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/retail_dataset.csv";
+    	String csv="/home/anubhav55182/eclipse-workspace/Apriori/apriori.csv";
     	BufferedReader br=null;
     	String line="";
     	Map<Integer,List<Integer>> map;       // <Transaction_id,List of Itemsets>
@@ -209,7 +216,7 @@ public class Apriori
     		int i=1;
     		while((line=br.readLine())!=null)
     		{
-    			transaction=line.split(" ");
+    			transaction=line.split(",");
     			Integer id;                    // items id
     			temp=new LinkedList<Integer>();
     			for(String s:transaction)
