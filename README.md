@@ -8,7 +8,7 @@ Apriori algorithm is one of the Data Mining algorithm which is used to find the 
 * joining. 
 ##### Apriori Property: 
 If an item X is joined with item Y, then  
-```###### Support(X U Y) = min (Support(X), Support(Y))```,
+###### ```Support(X U Y) = min (Support(X), Support(Y))```,
 where Support(X) = no. of transactions which contain the itemset X / total no. of transaction 
 
 Apriori uses a "bottom up" approach, where frequent subsets are extended one item at a time (a step known as candidate generation), and groups of candidates are tested against the data. The algorithm terminates when no further successful extensions are found.  
