@@ -13,4 +13,6 @@ Apriori uses a "bottom up" approach, where frequent subsets are extended one ite
 Apriori uses breadth-first search and a tree structure to count candidate item sets efficiently. It generates candidate item sets of length k from item sets of length k − 1. Then it prunes the candidates which have an infrequent sub pattern. According to the downward closure lemma, the candidate set contains all frequent k-length item sets. After that, it scans the transaction database to determine frequent item sets among the candidates. 
 
 ### Research Paper Links:
+* [Research of an Improved Apriori Algorithm in Data Mining Association Rules](http://www.ijcce.org/papers/128-B047.pdf)
 * [An improved Apriori algorithm for mining association rules](https://aip.scitation.org/doi/pdf/10.1063/1.4977361?class=pdf)
+* [An Improved Apriori Algorithm For Association Rules](https://www.researchgate.net/publication/260872883_An_Improved_Apriori_Algorithm_For_Association_Rules)
