@@ -1,5 +1,3 @@
-## AprioriAlgorithm
-Apriori Algorithm Implementation in Java.
 ## Introduction
 Association rule mining is the powerful tool now a days in Data mining. It identifies the correlation between the items in large databases. A typical example of Association rule      mining  is Market Basket analysis. In this method or approach it examines the buying habits of the customers by identifying the associations among the items purchased by the customers in their baskets.
 ## Algorithm
